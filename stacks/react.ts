@@ -20,7 +20,7 @@ interface IConnection {
   privateKey?: Buffer | string,
 }
 
-async function index({ workDir, serverKeyfileName, serverPassword, isPrivateKey }) {
+export const runReact = async ({ workDir, serverKeyfileName, serverPassword, isPrivateKey }) => {
   console.log('Deploying React Application...🚚');
     // Generating the build files
     const pathToApp = path.join(__dirname, '../../');
@@ -78,5 +78,3 @@ async function index({ workDir, serverKeyfileName, serverPassword, isPrivateKey 
         });
     });
 };
-
-module.exports = index;

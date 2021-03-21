@@ -1,4 +1,5 @@
 const ReactDeploy = require('./stacks/react');
+const NodeDeploy = require('./stacks/node');
 
 interface ISetupConfig {
   workingSetup: string, // React, Nodejs, Nextjs, Angularjs
@@ -16,11 +17,11 @@ interface ISetupConfig {
 async function run({ workingSetup, workDir, serverKeyfileName, serverPassword, isUsingNginx, isUsingPM2, isPrivateKey }: ISetupConfig) {
   switch(workingSetup.toUpperCase()) {
     case 'REACT': {
-      ReactDeploy({ workDir, serverKeyfileName, serverPassword, isPrivateKey });
+      ReactDeploy.runReact({ workDir, serverKeyfileName, serverPassword, isPrivateKey });
       break;
     }
     case 'NODE': {
-      console.log('Under construction... 🧑‍💻');
+      NodeDeploy.runNode({ workDir, serverKeyfileName, serverPassword, isPrivateKey });
       break;
     }
     case 'ANGULARJS': {
