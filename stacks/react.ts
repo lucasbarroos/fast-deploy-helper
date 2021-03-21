@@ -9,7 +9,8 @@ require('dotenv').config();
 async function index() {
   console.log('Deploying React Application');
     // Generating the build files
-    exec('cd ../ && ls', (err, stdout, stderr) => {
+    const pathToApp = path.join(__dirname, '../../');
+    exec(`npm --prefix ${pathToApp} run build`, (err, stdout, stderr) => {
       if (err) {
         // node couldn't execute the command
         console.log('Error generating the build', err);
@@ -17,7 +18,7 @@ async function index() {
       }
     
       console.log(`stdout: ${stdout}`);
-      // console.log(`stderr: ${stderr}`);
+      console.log(`stderr: ${stderr}`);
     });
     
 
