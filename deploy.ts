@@ -3,6 +3,8 @@ const ReactDeploy = require('./stacks/react');
 interface ISetupConfig {
   workingSetup: string, // React, Nodejs, Nextjs, Angularjs
   workDir?: string, // default: /var/www
+  serverKeyfileName?: string,
+  serverPassword?: string,
   isUsingNginx?: boolean,
   isUsingPM2?: boolean,
   isPrivateKey?: boolean,
@@ -11,10 +13,10 @@ interface ISetupConfig {
   },
 };
 
-async function run({ workingSetup, workDir, isUsingNginx, isUsingPM2, isPrivateKey }: ISetupConfig) {
+async function run({ workingSetup, workDir, serverKeyfileName, serverPassword, isUsingNginx, isUsingPM2, isPrivateKey }: ISetupConfig) {
   switch(workingSetup) {
     case 'REACT': {
-      ReactDeploy({ workDir, isPrivateKey });
+      ReactDeploy({ workDir, serverKeyfileName, serverPassword, isPrivateKey });
       break;
     }
     default:

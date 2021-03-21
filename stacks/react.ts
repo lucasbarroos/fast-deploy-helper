@@ -8,6 +8,8 @@ require('dotenv').config();
 
 interface IReactSetupConfig {
   workDir?: string, // default: /var/www
+  serverKeyfileName?: string,
+  serverPassword?: string,
   isPrivateKey?: boolean, // If the server uses a private key to connects
 };
 
@@ -18,7 +20,7 @@ interface IConnection {
   privateKey?: Buffer | string,
 }
 
-async function index({ workDir, isPrivateKey }) {
+async function index({ workDir, serverKeyfileName, serverPassword, isPrivateKey }) {
   console.log('Deploying React Application...🚚');
     // Generating the build files
     const pathToApp = path.join(__dirname, '../../');
@@ -39,9 +41,9 @@ async function index({ workDir, isPrivateKey }) {
       };
 
       if (isPrivateKey) {
-        connectionOptions.privateKey = `${path.join(__dirname, '..',`${process.env.SERVER_KEYFILE_NAME}.pem`)}`;
+        connectionOptions.privateKey = `${path.join(__dirname, '..',`${serverKeyfileName}.pem`)}`;
       } else {
-        connectionOptions.password = process.env.SERVER_PASSWORD;
+        connectionOptions.password = serverPassword;
       }
 
       ssh.connect(connectionOptions)
