@@ -1,14 +1,14 @@
 {
-  "name": "deploy",
-  "version": "1.0.0",
-  "description": "",
+  "name": "fast-deploy-helper",
+  "version": "0.0.1",
+  "description": "https://aws.amazon.com/premiumsupport/knowledge-center/convert-pem-file-into-ppk/",
   "main": "index.js",
   "scripts": {
     "deploy": "ts-node index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Lucas Barros",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^8.2.0",
@@ -23,5 +23,13 @@
     "eslint-config-google": "^0.14.0",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.3"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucasbarroos/infrastructure-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lucasbarroos/infrastructure-cli/issues"
+  },
+  "homepage": "https://github.com/lucasbarroos/infrastructure-cli#readme"
 }
