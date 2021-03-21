@@ -2,22 +2,36 @@ const fs = require('fs');
 const path = require('path');
 const {NodeSSH} = require('node-ssh');
 const ssh = new NodeSSH();
- 
-// Para o deploy na AWS (WEB):
-// 1 - Tem que mudar para branch master
-// 2 - Rodar o yarn e gerar o build local
-// 3 - Upar esse build na nuvem (CDN? Cloudfront? como?)
-// 4 - Conectar no servidor AWS
-// 5 - Entrar na pasta configurada e baixar o arquivo do build local
-// 6 - Feito!
+require('dotenv').config();
 
-console.log(process.env);
+interface ISetupConfig {
+  workingSetup: string, // React, Nodejs, Angularjs
+  workDir?: string, // default: /var/www
+  isUsingNginx?: boolean,
+  isUsingPM2?: boolean,
+  isPrivateKey?: boolean,
+};
 
-// ssh.connect({
-//   host: 'criatech.me',
-//   username: 'criatech',
-//   password: 'criatechpnz77',
-// //   privateKey: '/home/steel/.ssh/id_rsa'
-// }).then(function() {
-//     console.log('Connected');
-// });
+async function run({ workingSetup, workDir, isUsingNginx, isUsingPM2, isPrivateKey }: ISetupConfig) {
+  if (workingSetup === 'React') {
+    console.log('Deploying the React application');
+    // Connecting to the server to put the current build files
+    // ssh.connect({
+    //     host: process.env.SERVER_HOST,
+    //     username: process.env.SERVER_USER,
+    //     privateKey: `${path.join(__dirname, `${process.env.SERVER_KEYFILE_NAME}.pem`)}`,
+    //   })
+    //   .then(() => {
+
+    //     console.log('Connected');
+    //     ssh.execCommand('pm2 list').then((result) => {
+    //       console.log('STDOUT: ' + result.stdout);
+    //       // console.log('STDERR: ' + result.stderr);
+    //     });
+    //   });
+  }
+};
+
+module.exports = {
+  run,
+};
