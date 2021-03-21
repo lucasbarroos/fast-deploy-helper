@@ -39,17 +39,8 @@ export const runNode = async ({ workDir, serverKeyfileName, serverPassword, isPr
 
     ssh.connect(connectionOptions)
       .then(() => {
-        console.log('Server Connected! 🖥️');
-        // ssh.exec(`git -C ${workDir} pull --json`).then((result) => {
-        //   console.log('STDOUT: ' + result.stdout)
-        //    console.log('STDERR: ' + result.stderr)
-        //    console.log('\p\pDEPLOY FINISHED! 🚚');
-        //     ssh.dispose();
-        //   }).catch((err) => {
-        //     console.log('Err 💢', err);
-        //     ssh.dispose();
-        //   });
-        ssh.exec('git pull', [], {
+        console.log('Server Connected! 🖥️\p');
+        ssh.exec('git pull && lucasbarroos', [], {
           cwd: workDir,
           onStdout(chunk) {
             console.log('stdoutChunk', chunk.toString('utf8'))
