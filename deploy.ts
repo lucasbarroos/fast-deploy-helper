@@ -14,9 +14,21 @@ interface ISetupConfig {
 };
 
 async function run({ workingSetup, workDir, serverKeyfileName, serverPassword, isUsingNginx, isUsingPM2, isPrivateKey }: ISetupConfig) {
-  switch(workingSetup) {
+  switch(workingSetup.toUpperCase()) {
     case 'REACT': {
       ReactDeploy({ workDir, serverKeyfileName, serverPassword, isPrivateKey });
+      break;
+    }
+    case 'NODE': {
+      console.log('Under construction... 🧑‍💻');
+      break;
+    }
+    case 'ANGULARJS': {
+      console.log('Under construction... 🧑‍💻');
+      break;
+    }
+    case 'NEXT': {
+      console.log('Under construction... 🧑‍💻');
       break;
     }
     default:
