@@ -14,7 +14,7 @@ interface ISetupConfig {
 async function run({ workingSetup, workDir, isUsingNginx, isUsingPM2, isPrivateKey }: ISetupConfig) {
   switch(workingSetup) {
     case 'React': {
-      ReactDeploy();
+      ReactDeploy({ workDir: '', isPrivateKey: true });
       break;
     }
     default:

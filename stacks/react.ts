@@ -6,14 +6,19 @@ const { exec } = require('child_process');
 
 require('dotenv').config();
 
-async function index() {
+interface IReactSetupConfig {
+  workDir?: string, // default: /var/www
+  isPrivateKey?: boolean, // If the server uses a private key to connects
+};
+
+async function index({ workDir = '/var/www', isPrivateKey = false }: IReactSetupConfig) {
   console.log('Deploying React Application...🚚');
     // Generating the build files
     const pathToApp = path.join(__dirname, '../../');
     console.log('Generating the React Build...🏗️');
+
     exec(`npm --prefix ${pathToApp} run build`, (err, stdout, stderr) => {
       if (err) {
-        // node couldn't execute the command
         console.log('Error generating the build 💢', err);
         return;
       }
@@ -24,14 +29,15 @@ async function index() {
       ssh.connect({
           host: process.env.SERVER_HOST,
           username: process.env.SERVER_USER,
-          privateKey: `${path.join(__dirname, '..',`${process.env.SERVER_KEYFILE_NAME}.pem`)}`,
+          password: process.env.SERVER_USE_PRIVATE_KEY ? undefined : process.env.SERVER_PASSWORD,
+          privateKey: process.env.SERVER_USE_PRIVATE_KEY ? `${path.join(__dirname, '..',`${process.env.SERVER_KEYFILE_NAME}.pem`)}` : undefined,
         })
         .then(() => {
           console.log('Server Connected! 🖥️');
 
           const failed = []
           const successful = []
-          ssh.putDirectory(`${pathToApp}build`, '/var/www/build', {
+          ssh.putDirectory(`${pathToApp}build`, process.env.APP_WORK_DIR, {
             recursive: true,
             validate: function() {
               return true;
