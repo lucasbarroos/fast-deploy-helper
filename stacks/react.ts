@@ -11,7 +11,14 @@ interface IReactSetupConfig {
   isPrivateKey?: boolean, // If the server uses a private key to connects
 };
 
-async function index({ workDir = '/var/www', isPrivateKey = false }: IReactSetupConfig) {
+interface IConnection {
+  host: string,
+  username: string,
+  password?: string,
+  privateKey?: Buffer | string,
+}
+
+async function index({ workDir, isPrivateKey }) {
   console.log('Deploying React Application...🚚');
     // Generating the build files
     const pathToApp = path.join(__dirname, '../../');
@@ -26,24 +33,31 @@ async function index({ workDir = '/var/www', isPrivateKey = false }: IReactSetup
       console.log('React Build is done! 🤩');
 
       console.log('Connecting the server...⏱️');
-      ssh.connect({
-          host: process.env.SERVER_HOST,
-          username: process.env.SERVER_USER,
-          password: process.env.SERVER_USE_PRIVATE_KEY ? undefined : process.env.SERVER_PASSWORD,
-          privateKey: process.env.SERVER_USE_PRIVATE_KEY ? `${path.join(__dirname, '..',`${process.env.SERVER_KEYFILE_NAME}.pem`)}` : undefined,
-        })
+      let connectionOptions : IConnection = {
+        host: process.env.SERVER_HOST,
+        username: process.env.SERVER_USER,
+      };
+
+      if (isPrivateKey) {
+        connectionOptions.privateKey = `${path.join(__dirname, '..',`${process.env.SERVER_KEYFILE_NAME}.pem`)}`;
+      } else {
+        connectionOptions.password = process.env.SERVER_PASSWORD;
+      }
+
+      ssh.connect(connectionOptions)
         .then(() => {
           console.log('Server Connected! 🖥️');
 
           const failed = []
           const successful = []
-          ssh.putDirectory(`${pathToApp}build`, process.env.APP_WORK_DIR, {
+          ssh.putDirectory(`${pathToApp}build`, workDir, {
             recursive: true,
             validate: function() {
               return true;
             },
             tick: function(localPath, remotePath, error) {
               if (error) {
+                console.log('Error to transfer 💢', error);
                 failed.push(localPath)
               } else {
                 successful.push(localPath)
@@ -51,10 +65,11 @@ async function index({ workDir = '/var/www', isPrivateKey = false }: IReactSetup
             }
           }).then(function(status) {
             console.log('The directory transfer was', status ? 'successful' : 'unsuccessful')
-            console.log('Failed transfers', failed.join(', '))
-            console.log('Successful transfers', successful.join(', '))
+            console.log('Failed transfers: ', failed.join(', '))
+            console.log('Successful transfers: ', successful.join(', '))
 
             console.log('\p\pDEPLOY FINISHED! 🚚');
+            ssh.dispose();
           }).catch(function(err) {
             console.log('Err 💢', err);
           });
