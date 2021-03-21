@@ -54,9 +54,6 @@ async function index() {
           });
         });
     });
-    
-
-    
 };
 
 module.exports = index;
