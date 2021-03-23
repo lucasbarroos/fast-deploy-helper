@@ -1,5 +1,6 @@
 const ReactDeploy = require('./stacks/react');
 const NodeDeploy = require('./stacks/node');
+const AngularDeploy = require('./stacks/angular');
 
 interface ISetupConfig {
   workingSetup: string, // React, Nodejs, Nextjs, Angularjs
@@ -15,7 +16,7 @@ interface ISetupConfig {
 };
 
 async function run({ workingSetup, workDir, serverKeyfileName, serverPassword, isUsingNginx, isUsingPM2, isPrivateKey }: ISetupConfig) {
-  switch(workingSetup.toUpperCase()) {
+  switch (workingSetup.toUpperCase()) {
     case 'REACT': {
       ReactDeploy.runReact({ workDir, serverKeyfileName, serverPassword, isPrivateKey });
       break;
@@ -25,7 +26,7 @@ async function run({ workingSetup, workDir, serverKeyfileName, serverPassword, i
       break;
     }
     case 'ANGULARJS': {
-      console.log('Under construction... 🧑‍💻');
+      AngularDeploy.runAngularJS({ workDir, serverKeyfileName, serverPassword, isPrivateKey });
       break;
     }
     case 'NEXT': {
@@ -35,7 +36,7 @@ async function run({ workingSetup, workDir, serverKeyfileName, serverPassword, i
     default:
       console.log('Select a valid working setup');
       break;
-    }
+  }
 };
 
 module.exports = {
